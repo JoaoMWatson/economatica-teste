@@ -6,7 +6,7 @@ class ListaPadrao:
     Classe responsável pelas operações principais do programa
     """
 
-    def __init__(self, arquivo_json: str, quer_acionista: bool, quer_aplicacao: bool):
+    def __init__(self, arquivo_json: str, quer_acionista: bool = False, quer_aplicacao: bool = False):
         """Iniciação da classe/construtor
 
         Args:
@@ -20,7 +20,10 @@ class ListaPadrao:
         self.quer_aplicacao = quer_aplicacao
 
     def criar(self):
-        """Método de criação das listas
+        """Método de criação da lista desejada
+
+        Returns:
+            list: lista criada
         """
         with open(self.arquivo_json) as file:  # arquivo_json
             data = json.load(file)
@@ -31,7 +34,8 @@ class ListaPadrao:
                 if self.quer_aplicacao:
                     self.lista = [x for x in data if 'aplicacao' in x]
             else:
-                print(data)
+                self.lista = data
+        return self.lista
 
     def listar_todos(self):
         """Método responsável por listar todos os itens de uma lista
@@ -76,5 +80,18 @@ class ListaPadrao:
 if __name__ == '__main__':
     json_objeto = "Objeto.json"
     json_acionista_aplicacao = "AcionistaOuAplicacao.json"
-    teste1 = ListaPadrao(json_acionista_aplicacao, True, False)
-    print(teste1)
+
+    def ciar_lista_acionista():
+        lista_acionista = ListaPadrao(
+            json_acionista_aplicacao, True, False).criar()
+        return lista_acionista
+
+    def criar_lista_aplicacoes():
+        lista_acionista = ListaPadrao(
+            json_acionista_aplicacao, False, True).criar()
+        return lista_acionista
+
+    def criar_lista_objetos():
+        lista_acionista = ListaPadrao(
+           json_objeto).criar()
+        return lista_acionista
