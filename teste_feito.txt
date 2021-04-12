@@ -1,0 +1,104 @@
+funcao CriarListaDeAcionistas: ListaCoringa
+variavel
+    Resultado: ListaCoringa
+inicio
+    Resultado = ListaCoringa.Criar("AcionistaOuAplicacao.json", true, false)
+    Retorna Resultado
+fim
+
+funcao CriarListaDeAplicacoes: ListaCoringa
+variavel
+    Resultado: ListaCoringa
+inicio
+    Resultado = ListaCoringa.Criar("AcionistaOuAplicacao.json", false, true)
+    Retorna Resultado
+fim
+
+funcao CriarListaDeObjetos: ListaCoringa
+variavel
+    Resultado: ListaCoringa
+inicio
+    Resultado = ListaCoringa.Criar("Objeto.json", false, false)
+    Retorna Resultado
+fim
+
+###############################################################################################################
+
+estrItem = estrutura
+    Id: Inteiro
+    Nome: String;
+fim
+
+ListaCoringa = classe
+    privado
+        Lista: array de estrItem
+    publico
+        construtor Criar(arquivo: string; QuerAcionista: boolean; QuerAplicacao: boolean)
+        funcao IndiceDoId(Id: Inteiro): Inteiro
+        funcao IndiceDoNome(Nome: string): Inteiro
+        
+        propriedade Count: Inteiro
+        propriedade Item[Indice: Inteiro]: estrItem
+fim
+
+###############################################################################################################
+
+construtor ListaCoringa.Criar(arquivo, QuerAcionista, QuerAplicacao)
+variavel
+    arrayJson: Json
+    i: Inteiro
+    umItem: estrItem
+inicio
+    arrayJson = Json.LerDoArquivo(arquivo)
+
+    para i = 0 ate arrayJson.count
+        umItem = novo estrItem
+        umItem.Id = arrayJson[i]["id"]
+        umItem.Nome = arrayJson[i]["nome"]
+
+        se Lista.Size < umItem.Id
+            Lista.Size = umItem.Id + 1
+
+        se arquivo == "AcionistaOuAplicacao.json"
+            se QuerAcionista e arrayJson[i]["acionista"]
+            Lista[umItem.Id] = umItem
+            se QuerAplicacao e arrayJson[i]["aplicacao"]
+            Lista[umItem.Id] = umItem
+        senao
+            Lista[umItem.Id] = umItem
+    fim
+fim
+
+funcao ListaCoringa.IndiceDoId(Id: Inteiro): Inteiro
+variavel
+    i: Inteiro
+    Resultado: Inteiro
+inicio
+    para i = 0 ate Lista.count
+    se Lista[i].Id == Id
+        Resultado = i
+    fim
+    retorna Resultado
+fim
+
+funcao ListaCoringa.IndiceDoNome(Nome: string): Inteiro
+variavel
+    i: Inteiro
+    Resultado: Inteiro
+inicio
+    para i = 0 ate Lista.count
+        se Lista[i].Nome == Nome
+            Resultado = i
+    fim
+    retorna Resultado
+fim
+
+funcao ListaCoringa.Count: Inteiro
+inicio
+    Retorna Lista.Count
+fim
+
+funcao ListaCoringa.GetItem(Indice: Inteiro): estrItem
+inicio
+    retorna Lista[Indice]
+fim
